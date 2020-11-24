@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "837069906712",
+    "firebase_url": "https://malafatus-1589122458948.firebaseio.com",
+    "project_id": "malafatus-1589122458948",
+    "storage_bucket": "malafatus-1589122458948.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837069906712:android:becfafc6cd5387d406b46d",
+        "android_client_info": {
+          "package_name": "com.fidanoglu.malafatus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "837069906712-k11504m4glcnrjbveit3glm9d11bl71m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fidanoglu.malafatus",
+            "certificate_hash": "18665dc68c6555f18a812375d6fcf983bd4b8cbb"
+          }
+        },
+        {
+          "client_id": "837069906712-eqs9vh7h9kopc7lkge07j2p0so6jjt5e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCykSiZ8S515DKwgbdVokuUIJEPd_HbtBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "837069906712-eqs9vh7h9kopc7lkge07j2p0so6jjt5e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

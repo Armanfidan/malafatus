@@ -5,6 +5,6 @@ The application aims to let the user keep track of the time they spend on their 
 
 Malafatus Light                  |  Malafatus Dark                        |  Malafatus Profile
 :-------------------------------:|:--------------------------------------:|:-------------------------:
-![](/UI/Dashboard - week.png)    |  ![](/UI/Dashboard - month - 1.png)    |  ![](/UI/Profile.png)
+![](/UI/Dashboard-week.png)    |  ![](/UI/Dashboard-month-1.png)    |  ![](/UI/Profile.png)
 
 If a recorded session is shorter than a minute, the application will assume that it was started unintentionally and not record it. Otherwise, the session information (Time of start and duration of session) will be stored in a secure online database and will only be available to the user. For this reason, the application will need to have a user authentication and management system that stores the users’ private information securely.

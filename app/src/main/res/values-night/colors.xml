@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorBackground">#1B1B1B</color>
+    <color name="colorBackgroundCard">#000000</color>
+    <color name="colorBackgroundToggle">#2B2B2B</color>
+    <color name="colorBackgroundNav">#000000</color>
+    <color name="colorBackgroundButton">#000000</color>
+    <color name="colorAccentBlue">#5B97FF</color>
+    <color name="colorAccentRed">#F75151</color>
+    <color name="colorTitle">#F3F4F6</color>
+    <color name="colorText">#8B8F92</color>
+    <color name="colorSubtitle">#8C9399</color>
+    <color name="colorTextNav">#F3F4F6</color>
+    <color name="colorTextNavSelected">#5B97FF</color>
+    <color name="colorTextNavSelectedSession">#F75151</color>
+    <color name="colorTitleButton">#F3F4F6</color>
+    <color name="colorTextButton">@color/colorText</color>
+</resources>

@@ -3,8 +3,8 @@ Malafatus is an Android application that lets its users track and control their 
 
 The application aims to let the user keep track of the time they spend on their unwanted habits every day, such as playing video games. When the user signs up, they are asked to choose the habit they are aiming to eliminate. Then, they can simply start a "session" at the press of a button, and end it when they have stopped doing the activity that they are recording. The app will then keep track of the activity and provide the user with insights. There will, in the future, also be functionality that lets the user set scheduled times when the app will automatically start sessions. Ultimately, through insights, reminders, and other notifications, the user will be made aware of exactly how much time their habit is wasting throughout the day.
 
-Malafatus Light                  |  Malafatus Dark                        |  Malafatus Profile
+Dashboard, Light Mode            |  Dashboard, Dark Mode                  |  Profile view
 :-------------------------------:|:--------------------------------------:|:-------------------------:
-![](/UI/Dashboard-week.png)    |  ![](/UI/Dashboard-month-1.png)    |  ![](/UI/Profile.png)
+![](/UI/Dashboard-week.png)      |  ![](/UI/Dashboard-month-1.png)        |  ![](/UI/Profile.png)
 
 If a recorded session is shorter than a minute, the application will assume that it was started unintentionally and not record it. Otherwise, the session information (Time of start and duration of session) will be stored in a secure online database and will only be available to the user. For this reason, the application will need to have a user authentication and management system that stores the users’ private information securely.

@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -15,8 +16,6 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.TextView;
-
-import androidx.appcompat.widget.Toolbar;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -38,9 +37,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Button sessionButton;
     //    private Button resetButton;
-    private TextView previousSessionData, durationHistory, proteinLost;
+    private TextView previousSessionData, durationHistory;
     private LineChart history;
-    private Toolbar toolbar;
+//    private Toolbar toolbar;
 
     private Boolean sessionActive = false;
     private Boolean firstSession = true;
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.addAuthStateListener(authStateListener);
 
-        if (firebaseAuth.getCurrentUser() != null && profileJustCreated == false) {
+        if (firebaseAuth.getCurrentUser() != null && !profileJustCreated) {
             Intent intent = new Intent(MainActivity.this, EnterPinActivity.class);
             startActivity(intent);
         }
@@ -78,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         sessionButton = findViewById(R.id.session);
 //        resetButton = findViewById(R.id.resetGraph);
         durationHistory = findViewById(R.id.durationHistoryInfo);
-        proteinLost = findViewById(R.id.proteinLost);
+//        insights = findViewById(R.id.insights);
         history = findViewById(R.id.durationHistory);
 
         history.setNoDataText("Tap \"Start session\" to start saving data!");
@@ -88,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         updateHistory(history);
 
         sessionButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 if (!sessionActive) {
@@ -172,15 +172,16 @@ public class MainActivity extends AppCompatActivity {
     };
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("SessionActive", sessionActive);
         if (sessionActive)
             outState.putString("StartTime", startTime.toString());
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    protected void onRestoreInstanceState(Bundle inState) {
+    protected void onRestoreInstanceState(@NonNull Bundle inState) {
         super.onRestoreInstanceState(inState);
         sessionActive = inState.getBoolean("SessionActive");
 
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         long minute = (sessionDuration / (1000 * 60)) % 60;
         long hour = (sessionDuration / (1000 * 60 * 60)) % 24;
 
-        String duration = String.format("%02d:%02d", hour, minute);
+        @SuppressLint("DefaultLocale") String duration = String.format("%02d:%02d", hour, minute);
 
         if (minute == 0 && hour == 0) {
             if (seconds == 1)
@@ -244,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public long createChart(long[] data, LineChart history) {
-        List<Entry> entries = new ArrayList<Entry>();
+        List<Entry> entries = new ArrayList<>();
 
         for (int i = 0; i < data.length; i++)
             entries.add(new Entry(i, data[i]));
@@ -275,12 +276,11 @@ public class MainActivity extends AppCompatActivity {
         history.getDescription().setEnabled(false);
         history.setTouchEnabled(false);
 
-        long[] maxVals = data;
-        Arrays.sort(maxVals);
-        if (maxVals.length > 0) {
-            history.getAxisLeft().setAxisMaximum(maxVals[maxVals.length - 1] + 5000);
-            history.getAxisLeft().setAxisMinimum(maxVals[0] - (maxVals[maxVals.length - 1] - maxVals[0]) / 4);
-            return maxVals[maxVals.length - 1];
+        Arrays.sort(data);
+        if (data.length > 0) {
+            history.getAxisLeft().setAxisMaximum(data[data.length - 1] + 5000);
+            history.getAxisLeft().setAxisMinimum(data[0] - (data[data.length - 1] - data[0]) / 4f);
+            return data[data.length - 1];
         } else return 0;
     }
 
@@ -320,9 +320,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
                 // get the value the interpolator is at
-                Integer value = (Integer) animation.getAnimatedValue();
                 // I'm going to set the layout's height 1:1 to the tick
-                view.getLayoutParams().height = value.intValue();
+                view.getLayoutParams().height = (Integer) animation.getAnimatedValue();
                 // force all layouts to see which ones are affected by
                 // this layouts height change
                 view.requestLayout();

@@ -7,11 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +19,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.annotations.NotNull;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -46,42 +43,6 @@ public class EnterPinActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_enter_pin);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        user = firebaseAuth.getCurrentUser();
-
-        final DatabaseReference userReference;
-
-//         Don't forget to change this!
-//         Value Event Listeners are asynchronous - it's not a good idea to write anything to a global variable
-//         as we don't know when the function will return its data. This needs to be in a callback function, which
-//         itself needs to be in an interface. I lack the knowledge to make this happen right now, but you should ask
-//         Akin hoca whenever you have a lot of time to spare that you can spend on this.
-        if (user != null) {
-            databaseReference = FirebaseDatabase.getInstance().getReference();
-            userReference = databaseReference.child(user.getUid());
-
-            ValueEventListener listener = new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    pinHash = dataSnapshot.getValue(String.class);
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-                    System.out.println("The read failed: " + databaseError.getCode());
-                }
-            };
-            userReference.child("pinHash").addListenerForSingleValueEvent(listener);
-        }
-
-//        Comment these out for now, because I need to have fixed the asynchronous data reading first.
-//
-//        if (user != null && pinHash == null) {
-//            startActivity(new Intent(EnterPinActivity.this, CreatePinActivity.class));
-//        } else if (user == null)
-//            startActivity(new Intent(EnterPinActivity.this, SignUpActivity.class));
-
 
         pinField = findViewById(R.id.editPin);
 
@@ -166,11 +127,41 @@ public class EnterPinActivity extends AppCompatActivity {
         buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String currentPin = pinField.getText().toString().substring(0, pinField.getText().length() - 1);
+                String currentPin = pinField.getText().toString();
+                if (currentPin.length() > 0) currentPin = currentPin.substring(0, pinField.getText().length() - 1);
                 pinField.setText(currentPin);
             }
         });
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        user = firebaseAuth.getCurrentUser();
+
+        final DatabaseReference userReference;
+
+//         Don't forget to change this!
+//         Value Event Listeners are asynchronous - it's not a good idea to write anything to a global variable
+//         as we don't know when the function will return its data. This needs to be in a callback function, which
+//         itself needs to be in an interface.
+        if (user != null) {
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            userReference = databaseReference.child(user.getUid());
+            ValueEventListener listener = new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    pinHash = dataSnapshot.getValue(String.class);
+                    
+                    if (user != null && pinHash == null) {
+                        startActivity(new Intent(EnterPinActivity.this, CreatePinActivity.class));
+                    } else if (user == null)
+                        startActivity(new Intent(EnterPinActivity.this, SignUpActivity.class));
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    System.out.println("The read failed: " + databaseError.getCode());
+                }
+            };
+            userReference.child("pinHash").addListenerForSingleValueEvent(listener);
+        }
 
         pinField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -214,7 +205,7 @@ public class EnterPinActivity extends AppCompatActivity {
                     digit3.setImageResource(R.drawable.pin_display_digit_entered);
                     digit4.setImageResource(R.drawable.pin_display_digit_entered);
                     if (user != null) {
-                        if (pinHash != null && alreadySignedIn == false) {
+                        if (pinHash != null && !alreadySignedIn) {
                             try {
                                 newPinHash = HashGenerator.sha256(newPin);
                             } catch (NoSuchAlgorithmException e) {
@@ -239,6 +230,5 @@ public class EnterPinActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        return;
     }
 }
